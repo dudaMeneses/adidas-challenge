@@ -24,13 +24,17 @@ class ProductController(private val stockService: StockService, private val prod
     @GetMapping(path = ["/{id}"])
     fun findOne(@PathVariable id: Int): Mono<ProductResponse> =
         productService.findOne(id)
-            .map(ProductResponse::of)
+            .flatMap { product ->
+                Mono.just(ProductResponse(product.stock.total, product.stock.reserved, product.stock.sold))
+            }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = ["/{id}/reserve"])
     fun reserve(@PathVariable id: Int): Mono<ReservationResponse> =
         stockService.reserve(id)
-            .map(ReservationResponse::of)
+            .flatMap { reservation ->
+                Mono.just(ReservationResponse(reservation))
+            }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = ["/{id}/unreserve"])
