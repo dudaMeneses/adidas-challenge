@@ -17,20 +17,20 @@ class ProductController(private val stockService: StockService, private val prod
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping(path = ["/{id}/stock"])
-    fun registerStock(@PathVariable id: Int, @RequestBody request: StockRequest) =
+    fun registerStock(@PathVariable id: String, @RequestBody request: StockRequest) =
         stockService.register(id, request.toModel())
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = ["/{id}"])
-    fun findOne(@PathVariable id: Int): Mono<ProductResponse> =
+    fun findOne(@PathVariable id: String): Mono<ProductResponse> =
         productService.findOne(id)
             .map { product ->
-                ProductResponse(product.stock.total, product.stock.reserved, product.stock.sold)
+                ProductResponse(product.stock.total, product.stock.getReserved(), product.stock.getSold())
             }
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = ["/{id}/reserve"])
-    fun reserve(@PathVariable id: Int): Mono<ReservationResponse> =
+    fun reserve(@PathVariable id: String): Mono<ReservationResponse> =
         stockService.reserve(id)
             .map { reservation ->
                 ReservationResponse(reservation)
@@ -38,11 +38,11 @@ class ProductController(private val stockService: StockService, private val prod
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = ["/{id}/unreserve"])
-    fun unReserve(@PathVariable id: Int, request: ReservationRequest) =
-        stockService.unReserve(id, request)
+    fun unReserve(@PathVariable id: String, request: ReservationRequest) =
+        stockService.unReserve(id, request.reservationToken)
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = ["/{id}/sold"])
-    fun sell(@PathVariable id: Int, request: ReservationRequest) =
+    fun sell(@PathVariable id: String, request: ReservationRequest) =
         stockService.sell(id, request)
 }

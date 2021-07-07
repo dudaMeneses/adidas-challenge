@@ -4,5 +4,5 @@ import com.duda.adidaschallenge.domain.model.Product
 import reactor.core.publisher.Mono
 
 interface ProductService {
-    fun findOne(id: Int): Mono<Product>
+    fun findOne(id: String): Mono<Product>
 }

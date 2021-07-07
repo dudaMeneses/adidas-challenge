@@ -5,8 +5,8 @@ import com.duda.adidaschallenge.domain.model.Stock
 import reactor.core.publisher.Mono
 
 interface StockService {
-    fun register(productId: Int, stock: Stock)
-    fun reserve(productId: Int): Mono<String>
-    fun unReserve(productId: Int, request: ReservationRequest)
-    fun sell(id: Int, request: ReservationRequest)
+    fun register(productId: String, stock: Stock)
+    fun reserve(productId: String): Mono<String>
+    fun unReserve(productId: String, token: String)
+    fun sell(id: String, request: ReservationRequest)
 }
