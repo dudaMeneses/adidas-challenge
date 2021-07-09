@@ -4,6 +4,6 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document(collection = "stocks")
-class StockMongo(@Id var id: String?, val total: Int, val reserves: List<ReserveMongo>) {
+data class StockMongo(@Id var id: String?, val total: Int, val reserves: List<ReserveMongo>) {
     constructor(total: Int) : this(null, total, listOf())
 }

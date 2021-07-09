@@ -1,6 +1,5 @@
 package com.duda.adidaschallenge.domain.service.impl
 
-import com.duda.adidaschallenge.application.projection.request.ReservationRequest
 import com.duda.adidaschallenge.domain.model.Product
 import com.duda.adidaschallenge.domain.model.Reserve
 import com.duda.adidaschallenge.domain.model.Stock
@@ -24,13 +23,11 @@ class StockServiceImpl(private val productRepository: ProductRepository): StockS
             .map { product -> this.reserve(product)}
 
     override fun unReserve(productId: String, token: String) {
-        Mono.zip(productRepository.findReservation(productId, token), productRepository.findById(productId))
-            .map { tuple -> this.unreserve(tuple.t1, tuple.t2) }
-            .doOnNext { product -> productRepository.save(product) }
+        productRepository.unreserve(productId, token);
     }
 
-    override fun sell(id: String, request: ReservationRequest) {
-        TODO("Not yet implemented")
+    override fun sell(productId: String, token: String) {
+        productRepository.sell(productId, token)
     }
 
     private fun validateReserveQuantity(product: Product): Product {

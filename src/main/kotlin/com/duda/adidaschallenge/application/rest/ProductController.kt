@@ -4,6 +4,7 @@ import com.duda.adidaschallenge.application.projection.request.ReservationReques
 import com.duda.adidaschallenge.application.projection.request.StockRequest
 import com.duda.adidaschallenge.application.projection.response.ProductResponse
 import com.duda.adidaschallenge.application.projection.response.ReservationResponse
+import com.duda.adidaschallenge.domain.model.Stock
 import com.duda.adidaschallenge.domain.service.ProductService
 import com.duda.adidaschallenge.domain.service.StockService
 import org.springframework.http.HttpStatus
@@ -18,7 +19,7 @@ class ProductController(private val stockService: StockService, private val prod
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping(path = ["/{id}/stock"])
     fun registerStock(@PathVariable id: String, @RequestBody request: StockRequest) =
-        stockService.register(id, request.toModel())
+        stockService.register(id, Stock(null, request.stock, listOf()))
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = ["/{id}"])
@@ -44,5 +45,5 @@ class ProductController(private val stockService: StockService, private val prod
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = ["/{id}/sold"])
     fun sell(@PathVariable id: String, request: ReservationRequest) =
-        stockService.sell(id, request)
+        stockService.sell(id, request.reservationToken)
 }

@@ -25,10 +25,13 @@ About test pyramid, it was covered until the `API tests` layer.
 
 ## Personal Considerations
 
-- `PATCH` method considers an existent resource to apply partial updates, so I would split the creation to `POST` and the partial stock update to `PATCH` instead both in the same method
-- At `unreserve` and `sold` have signs to be `PUT` methods, once they are dependent of a resource creation (aka `reservationToken`) to manipulate an existent status
-- Services that produce no result could receive status code `NO_CONTENT` instead `OK` once they don't result entities for the service call and there are no asynchronous processing unfinished
-- Service `/product/:id/sold` naming doesn't follow REST common practices or the other services naming patterns in order to execute a command. I'd recommend `/product/:id/sell`
+- `PATCH` method considers an existent resource to apply partial updates, so I would split the creation to `POST` and the partial stock update to `PATCH` instead both in the same method.
+- At `unreserve` and `sold` have signs to be `PUT` methods, once they are dependent of a resource creation (aka `reservationToken`) to manipulate an existent status.
+- Services that produce no result could receive status code `NO_CONTENT` instead `OK` once they don't result entities for the service call and there are no asynchronous processing unfinished.
+- Service `/product/:id/sold` naming doesn't follow REST common practices, or even the other services naming pattern, in order to execute a command. I'd recommend `/product/:id/sell` instead.
 
 ## Future Steps
+
+- Real database running in cloud because locally is not scalable at all
+- Coded infrastructure (terraform maybe)
 
