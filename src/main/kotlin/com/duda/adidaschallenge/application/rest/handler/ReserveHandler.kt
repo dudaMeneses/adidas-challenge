@@ -13,30 +13,21 @@ import reactor.core.publisher.Mono
 @Component
 class ReserveHandler(private val reserveService: ReserveService) {
     fun reserve(request: ServerRequest): Mono<ServerResponse> {
-        return try {
-            val response = reserveService.reserve(request.pathVariable("id"))
-                .map { reservation ->
-                    ReservationResponse(reservation)
-                }
+        val response = reserveService.reserve(request.pathVariable("id"))
+            .map { reservation ->
+                ReservationResponse(reservation)
+            }
 
-            ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(response, ReservationResponse::class.java))
-        } catch (ex: Exception) {
-            Mono.error(ex)
-        }
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromPublisher(response, ReservationResponse::class.java))
     }
 
-    fun unreserve(request: ServerRequest): Mono<ServerResponse> {
-        return try {
-            request.bodyToMono(ReservationRequest::class.java)
-                .doOnNext { reserve ->
-                    val productId = request.pathVariable("id")
-                    reserveService.unreserve(productId, reserve.reservationToken)
-                }
-                .then(ServerResponse.ok().build())
-        } catch (ex: Exception) {
-            Mono.error(ex)
-        }
-    }
+    fun unreserve(request: ServerRequest): Mono<ServerResponse> =
+        request.bodyToMono(ReservationRequest::class.java)
+            .doOnNext { reserve ->
+                val productId = request.pathVariable("id")
+                reserveService.unreserve(productId, reserve.reservationToken)
+            }
+            .then(ServerResponse.ok().build())
 }

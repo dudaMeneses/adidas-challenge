@@ -14,30 +14,21 @@ import reactor.core.publisher.Mono
 @Component
 class StockHandler(private val stockService: StockService) {
     fun findByProductId(request: ServerRequest): Mono<ServerResponse> {
-        return try {
-            val response = stockService.findByProductId(request.pathVariable("id"))
-                .map { stock ->
-                    StockResponse(stock.total, stock.getReserved(), stock.getSold())
-                }
+        val response = stockService.findByProductId(request.pathVariable("id"))
+            .map { stock ->
+                StockResponse(stock.total, stock.getReserved(), stock.getSold())
+            }
 
-            ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(response, StockResponse::class.java))
-        } catch (ex: Exception){
-            return Mono.error(ex)
-        }
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromPublisher(response, StockResponse::class.java))
     }
 
-    fun register(request: ServerRequest): Mono<ServerResponse> {
-        return try {
-            request.bodyToMono(StockRequest::class.java)
-                .doOnNext { stockRequest ->
-                    val productId = request.pathVariable("id")
-                    stockService.register(Stock(total = stockRequest.stock, productId = productId))
-                }
-                .then(ServerResponse.noContent().build())
-        } catch (ex: Exception){
-            Mono.error(ex)
-        }
-    }
+    fun register(request: ServerRequest): Mono<ServerResponse> =
+        request.bodyToMono(StockRequest::class.java)
+            .doOnNext { stockRequest ->
+                val productId = request.pathVariable("id")
+                stockService.register(Stock(total = stockRequest.stock, productId = productId))
+            }
+            .then(ServerResponse.noContent().build())
 }

@@ -4,3 +4,7 @@ spring:
       host: localhost
       port: 27017
       database: adidas-challenge-db
+springfox:
+  documentation:
+    swagger-ui:
+      base-url: /documentation

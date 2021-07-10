@@ -5,7 +5,7 @@
 ## How to
 
 - Run: `make run`
-> After make it run you can access the [Swagger](http://localhost:8080/swagger-ui.html) page to test the endpoints.
+> After make it run you can access the [Swagger](http://localhost:8080/documentation/swagger-ui/) page to test the endpoints.
 - Test: `make test`
 
 ## Tech Stack
@@ -26,6 +26,7 @@ About test pyramid, it was covered until the `API tests` layer.
 
 ## Personal Considerations
 
+- There was no endpoint to create a product, so I took the freedom to create a `POST` one under `/product`.
 - `product` is a resource from the application, so its exposing in REST services should be plural instead.
 - `PATCH` method considers an existent resource to apply partial updates, so I would split the creation to `POST` and the partial stock update to `PATCH` instead both in the same method.
 - At `unreserve` and `sold` have signs to be `PUT` methods, once they are dependent of a resource creation (aka `reservationToken`) to manipulate an existent status.
