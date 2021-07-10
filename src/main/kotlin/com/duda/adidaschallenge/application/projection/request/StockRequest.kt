@@ -1,5 +1,5 @@
 package com.duda.adidaschallenge.application.projection.request
 
-import com.duda.adidaschallenge.domain.model.Stock
+import io.swagger.annotations.ApiModelProperty
 
-data class StockRequest(var stock: Int)
+data class StockRequest(@ApiModelProperty(example = "1") var stock: Int)

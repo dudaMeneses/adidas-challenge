@@ -33,11 +33,13 @@ About test pyramid, it was covered until the `API tests` layer.
 - Services that produce no result could receive status code `NO_CONTENT` instead `OK` once they don't result entities for the service call and there are no asynchronous processing unfinished.
 - Service `/product/:id/sold` naming doesn't follow REST common practices, or even the other services naming pattern, in order to execute a command. I'd recommend `/product/:id/sell` instead.
 - MongoDB is not a relational DB, so there will be indeed redundancies regarding data saved. What was tried is keep the data structure as simple as possible in order to serve the application (aka, challenge) fast and usable.
-- To solve the concurrent reservations and sellings it was opted for the optimistical lock provided for MongoDB, using the `@Version` annotation on database entities. 
+- To solve the concurrent reservations and sells it was opted for the optimistical lock provided for MongoDB, using the `@Version` annotation on database entities. 
 
 ## Future Steps
 
 - Real database running in cloud because locally is not scalable at all
 - Coded infrastructure (terraform maybe...)
+- Apply security to run Swagger
+- Provide performance tests with Gatling or JMeter
 
 
