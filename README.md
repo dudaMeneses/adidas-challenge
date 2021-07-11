@@ -22,7 +22,7 @@
 > Coding premises were `DDD`, `Hexagonal Architecture` and `SOLID` principles.
 
 <p align="center">
-  <img width="460" height="300" src="./auxiliary-files/images/ddd-hexagonal.png">
+  <img width="460" height="460" src="./auxiliary-files/images/ddd-hexagonal.png">
 </p>
 
 - *Application*: Responsible to be the connection point to the application with the "external world", exposing request and response entities;
