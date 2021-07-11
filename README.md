@@ -55,6 +55,7 @@
 ### Future Steps
 
 - Real database running in cloud because locally is not scalable at all
+- Add authentication to MongoDB container
 - Coded infrastructure (terraform & kubernetes)
 - Apply security to run Swagger
 - Provide performance tests with Gatling or JMeter

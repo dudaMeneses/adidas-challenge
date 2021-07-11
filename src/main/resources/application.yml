@@ -2,13 +2,13 @@ spring:
   data:
     mongodb:
       auto-index-creation: true
-      authentication-database: admin
       host: 127.0.0.1
       port: 27017
-      username: root
-      password: secret
       database: adidas-challenge-db
 springfox:
   documentation:
     swagger-ui:
       base-url: /documentation
+server:
+  error:
+    include-message: always

@@ -6,9 +6,8 @@ services:
     restart: always
     environment:
       - MONGO_INITDB_DATABASE=adidas-challenge-db
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=secret
     volumes:
-      - ./mongo-volume:/data/db
+      - ./mongo/volume:/data/db
+      - ./mongo/logs:/var/logs/mongodb
     ports:
       - 27017:27017
