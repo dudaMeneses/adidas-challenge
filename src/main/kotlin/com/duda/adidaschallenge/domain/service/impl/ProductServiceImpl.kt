@@ -21,7 +21,8 @@ class ProductServiceImpl(private val productRepository: ProductRepository,
             .flatMap { reserveRepository.findByIdAndStockId(token, it) }
             .filter { !it.sold }
             .switchIfEmpty(Mono.error(ReservationAlreadySoldException(token)))
-            .doOnNext { reserveRepository.sell(Reserve(it.id, it.stockId, true)) }
+            .flatMap { reserveRepository.sell(Reserve(it.id, it.stockId)) }
+            .doOnNext { stockRepository.adjustStockAfterSell(it.stockId) }
             .then()
 
     @Transactional

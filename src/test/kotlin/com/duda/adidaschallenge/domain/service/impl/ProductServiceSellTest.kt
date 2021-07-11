@@ -70,9 +70,13 @@ class ProductServiceSellTest {
         whenever(reserveRepository.findByIdAndStockId(anyString(), any()))
             .thenReturn(Mono.just(Reserve(id = "321",stockId = "456", sold = false)))
 
+        whenever(reserveRepository.sell(any()))
+            .thenReturn(Mono.just(Reserve(id = "321",stockId = "456", sold = false)))
+
         productService.sell("123", "321").block()
 
         verify(reserveRepository).sell(any())
+        verify(stockRepository).adjustStockAfterSell(anyString())
     }
 }
 
