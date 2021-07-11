@@ -6,6 +6,7 @@ import com.duda.adidaschallenge.domain.service.StockService
 import com.duda.adidaschallenge.domain.service.exception.StockNotFoundForProductException
 import com.duda.adidaschallenge.infrastructure.database.StockRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.onErrorMap
 import java.util.function.Consumer
@@ -18,6 +19,7 @@ class StockServiceImpl(private val stockRepository: StockRepository,
         return stockRepository.findByProductId(productId);
     }
 
+    @Transactional
     override fun register(newStock: Stock): Mono<Void> =
         stockRepository.findByProductId(newStock.productId)
             .onErrorReturn(Stock(productId = newStock.productId))
