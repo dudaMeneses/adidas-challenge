@@ -21,6 +21,7 @@ class ReserveServiceImpl(private val reserveRepository: ReserveRepository,
 
     override fun unreserve(productId: String, token: String): Mono<Void> =
         stockRepository.findByProductId(productId)
+            .map { reserveRepository.findByIdAndStockId(token, it) }
             .map { reserveRepository.unreserve(token) }
             .then()
 

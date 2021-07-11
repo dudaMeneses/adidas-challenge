@@ -12,8 +12,8 @@ class StockRepository(private val stockMongoDBRepository: StockMongoDBRepository
 
     fun findByProductId(productId: String): Mono<Stock> =
         stockMongoDBRepository.findByProductId(productId)
-            .map { Stock(it.id, it.total, it.productId) }
             .switchIfEmpty(Mono.error(StockNotFoundForProductException(productId)))
+            .map { Stock(it.id, it.total, it.productId) }
 
     fun save(stock: Stock) {
         stockMongoDBRepository.save(StockMongo(stock.id, stock.productId, stock.total))
