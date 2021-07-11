@@ -1,6 +1,6 @@
 package com.duda.adidaschallenge.application.rest
 
-import com.duda.adidaschallenge.application.projection.ProductResponse
+import com.duda.adidaschallenge.application.projection.response.ProductResponse
 import com.duda.adidaschallenge.application.projection.request.ProductRequest
 import com.duda.adidaschallenge.application.projection.request.ReservationRequest
 import com.duda.adidaschallenge.application.projection.request.StockRequest
@@ -52,5 +52,4 @@ class ProductController(private val stockHandler: StockHandler,
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun createProduct(@RequestBody request: ProductRequest): Mono<ProductResponse> =
         productHandler.create(request)
-            .map { product -> ProductResponse(product.id, product.name)  }
 }

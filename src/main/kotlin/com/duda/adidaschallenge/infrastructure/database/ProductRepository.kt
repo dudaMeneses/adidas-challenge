@@ -10,5 +10,5 @@ import reactor.core.publisher.Mono
 class ProductRepository(private val productMongoDBRepository: ProductMongoDBRepository) {
     fun save(product: Product): Mono<Product> =
         productMongoDBRepository.save(ProductMongo(name = product.name))
-            .map { p -> Product(id = p.id, name = p.name) }
+            .map { Product(id = it.id, name = it.name) }
 }

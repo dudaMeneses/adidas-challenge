@@ -2,7 +2,6 @@ package com.duda.adidaschallenge.infrastructure.database
 
 import com.duda.adidaschallenge.domain.model.Stock
 import com.duda.adidaschallenge.domain.service.exception.StockNotFoundForProductException
-import com.duda.adidaschallenge.infrastructure.database.mongo.ProductMongoDBRepository
 import com.duda.adidaschallenge.infrastructure.database.mongo.StockMongoDBRepository
 import com.duda.adidaschallenge.infrastructure.model.StockMongo
 import org.springframework.stereotype.Repository
@@ -13,7 +12,7 @@ class StockRepository(private val stockMongoDBRepository: StockMongoDBRepository
 
     fun findByProductId(productId: String): Mono<Stock> =
         stockMongoDBRepository.findByProductId(productId)
-            .map { stock -> Stock(stock.id, stock.total, stock.productId, listOf()) }
+            .map { Stock(it.id, it.total, it.productId) }
             .switchIfEmpty(Mono.error(StockNotFoundForProductException(productId)))
 
     fun save(stock: Stock) {

@@ -5,5 +5,5 @@ import reactor.core.publisher.Mono
 
 interface StockService {
     fun findByProductId(productId: String): Mono<Stock>
-    fun register(newStock: Stock)
+    fun register(newStock: Stock): Mono<Void>
 }

@@ -10,9 +10,7 @@ import reactor.core.publisher.Mono
 class StockHandler(private val stockService: StockService) {
     fun findByProductId(productId: String): Mono<StockResponse> =
         stockService.findByProductId(productId)
-            .map { stock ->
-                StockResponse(stock.total, stock.getReserved(), stock.getSold())
-            }
+            .map { StockResponse(it.total, it.reserves.size, it.getSold()) }
 
     fun register(productId: String, stock: Int) {
         stockService.register(Stock(total = stock, productId = productId))

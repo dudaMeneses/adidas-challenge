@@ -2,7 +2,8 @@ version: '3'
 services:
   database:
     image: 'mongo'
-    container_name: 'adidas-challenge-container'
+    container_name: 'mongo'
+    restart: always
     environment:
       - MONGO_INITDB_DATABASE=adidas-challenge-db
       - MONGO_INITDB_ROOT_USERNAME=root
@@ -10,4 +11,4 @@ services:
     volumes:
       - ./mongo-volume:/data/db
     ports:
-      - '27017-27019:27017-27019'
+      - 27017:27017

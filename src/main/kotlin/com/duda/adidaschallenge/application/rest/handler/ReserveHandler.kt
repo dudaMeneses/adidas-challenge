@@ -9,9 +9,7 @@ import reactor.core.publisher.Mono
 class ReserveHandler(private val reserveService: ReserveService) {
     fun reserve(productId: String): Mono<ReservationResponse> =
         reserveService.reserve(productId)
-            .map { reservation ->
-                ReservationResponse(reservation)
-            }
+            .map { ReservationResponse(it) }
 
     fun unreserve(productId: String, token: String) {
         reserveService.unreserve(productId, token)

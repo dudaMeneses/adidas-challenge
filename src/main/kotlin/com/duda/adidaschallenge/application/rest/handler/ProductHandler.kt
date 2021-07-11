@@ -1,6 +1,6 @@
 package com.duda.adidaschallenge.application.rest.handler
 
-import com.duda.adidaschallenge.application.projection.ProductResponse
+import com.duda.adidaschallenge.application.projection.response.ProductResponse
 import com.duda.adidaschallenge.application.projection.request.ProductRequest
 import com.duda.adidaschallenge.domain.model.Product
 import com.duda.adidaschallenge.domain.service.ProductService
@@ -15,8 +15,6 @@ class ProductHandler(private val productService: ProductService) {
 
     fun create(request: ProductRequest): Mono<ProductResponse> =
             productService.save(Product(name = request.name))
-            .map { product ->
-                ProductResponse(product.id, product.name)
-            }
+            .map { ProductResponse(it.id, it.name) }
 
 }

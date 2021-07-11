@@ -3,7 +3,6 @@ package com.duda.adidaschallenge.domain.service.impl
 import com.duda.adidaschallenge.domain.model.Stock
 import com.duda.adidaschallenge.domain.service.ReserveService
 import com.duda.adidaschallenge.domain.service.StockService
-import com.duda.adidaschallenge.domain.service.exception.StockNotFoundForProductException
 import com.duda.adidaschallenge.infrastructure.database.StockRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
@@ -16,15 +15,12 @@ class StockServiceImpl(private val stockRepository: StockRepository,
         return stockRepository.findByProductId(productId);
     }
 
-    override fun register(newStock: Stock) {
+    override fun register(newStock: Stock): Mono<Void> =
         stockRepository.findByProductId(newStock.productId)
-            .map { s -> s.copy(reserves = reserveService.findByProductId(s.productId)) }
-            .map { s -> this.validateReserveQuantity(s) }
-            .map { s -> s.copy(total = newStock.total) }
-            .doOnNext { s -> stockRepository.save(s) }
-    }
+            .defaultIfEmpty(Stock(productId = newStock.productId))
+            .flatMap { reserveService.validateReserveQuantity(it) }
+            .map { it.copy(total = newStock.total) }
+            .doOnNext { stockRepository.save(it) }
+            .then()
 
-    private fun validateReserveQuantity(stock: Stock): Stock {
-        TODO("Not yet implemented")
-    }
 }
