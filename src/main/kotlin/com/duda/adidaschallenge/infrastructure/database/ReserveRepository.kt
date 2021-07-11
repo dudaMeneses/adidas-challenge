@@ -17,7 +17,7 @@ class ReserveRepository(private val reserveMongoDBRepository: ReserveMongoDBRepo
             .map { Reserve(it.id, it.stockId, it.sold) }
 
     fun unreserve(token: String) {
-        TODO("Not yet implemented")
+        reserveMongoDBRepository.deleteById(token)
     }
 
     fun findByIdAndStockId(token: String, stock: Stock): Mono<Reserve> =
