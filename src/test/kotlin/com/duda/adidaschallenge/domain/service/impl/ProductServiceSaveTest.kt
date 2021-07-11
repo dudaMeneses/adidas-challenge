@@ -12,21 +12,18 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.mock
 
 @ExtendWith(MockitoExtension::class)
 class ProductServiceSaveTest{
 
-    @InjectMocks
     private lateinit var productService: ProductServiceImpl
+    private val productRepository: ProductRepository = mock()
 
-    @Mock
-    private lateinit var productRepository: ProductRepository
-
-    @Mock
-    private lateinit var stockRepository: StockRepository
-
-    @Mock
-    private lateinit var reserveRepository: ReserveRepository
+    @BeforeEach
+    fun init(){
+        productService = ProductServiceImpl(productRepository, mock(), mock())
+    }
 
     @Test
     fun whenHappyPath_thenSaveProduct(){
