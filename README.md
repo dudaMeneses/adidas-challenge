@@ -54,6 +54,7 @@
 - Spring-Boot (mongodb-reactive and webflux)
 - Docker
 - Makefile
+- Github Actions (for CI only)
 
 ### Future Steps
 
