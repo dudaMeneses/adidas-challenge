@@ -36,7 +36,7 @@ class CreateStockForProductIntegrationTest {
     }
 
     @Test
-    fun whenProductExists_thenReturnProductStock(){
+    fun whenProductExistsAndThereIsNoStock_thenSaveAccordingly(){
         val product = productMongoDBRepository.save(ProductMongo(name = "test")).block()
 
         client.patch()
@@ -48,5 +48,18 @@ class CreateStockForProductIntegrationTest {
             .bodyValue(StockRequest(10))
             .exchange()
             .expectStatus().isNoContent
+
+        client.get()
+            .uri("/product/{id}", product?.id)
+            .headers {
+                it.accept = listOf(MediaType.APPLICATION_JSON)
+            }
+            .exchange()
+            .expectStatus().isOk
+            .expectBody()
+            .jsonPath("$.IN_STOCK").isEqualTo(10)
+            .jsonPath("$.RESERVED").isEqualTo(0)
+            .jsonPath("$.SOLD").isEqualTo(0)
     }
+
 }

@@ -32,7 +32,7 @@ class ReserveServiceImpl(private val reserveRepository: ReserveRepository,
     override fun findByStockId(stockId: String?): Flux<Reserve> =
         reserveRepository.findByStockId(stockId)
 
-    override fun validateReserveQuantity(stock: Stock): Mono<Stock> =
+    private fun validateReserveQuantity(stock: Stock): Mono<Stock> =
         Mono.just(stock)
             .map { reserveRepository.findByStockId(it.id) }
             .flatMap { it.collectList() }

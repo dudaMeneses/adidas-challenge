@@ -26,4 +26,7 @@ class StockRepository(private val stockMongoDBRepository: StockMongoDBRepository
                 .map { Stock(it.id, it.total, it.productId) }
         }
 
+    fun delete(stock: Stock) =
+        stock.id?.let { stockMongoDBRepository.deleteById(it) }
+
 }

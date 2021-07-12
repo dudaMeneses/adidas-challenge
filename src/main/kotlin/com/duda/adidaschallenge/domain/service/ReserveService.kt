@@ -9,5 +9,4 @@ interface ReserveService {
     fun reserve(productId: String): Mono<String>
     fun unreserve(productId: String, token: String): Mono<Void>
     fun findByStockId(stockId: String?): Flux<Reserve>
-    fun validateReserveQuantity(stock: Stock): Mono<Stock>
 }

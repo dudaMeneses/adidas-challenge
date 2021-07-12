@@ -33,4 +33,8 @@ class ReserveRepository(private val reserveMongoDBRepository: ReserveMongoDBRepo
         reserveMongoDBRepository.save(ReserveMongo(reserve.id, reserve.stockId, true))
             .map { Reserve(it.id, it.stockId, it.sold) }
 
+    fun save(reserve: Reserve): Mono<Reserve> =
+        reserveMongoDBRepository.save(ReserveMongo(id = reserve.id, stockId = reserve.stockId, sold = reserve.sold))
+            .map { Reserve(it.id, it.stockId, it.sold) }
+
 }

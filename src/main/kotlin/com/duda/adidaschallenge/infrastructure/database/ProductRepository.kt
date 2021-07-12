@@ -17,4 +17,8 @@ class ProductRepository(private val productMongoDBRepository: ProductMongoDBRepo
         productMongoDBRepository.findById(id)
             .switchIfEmpty(Mono.error(ProductNotFoundException(id)))
             .map { Product(id = it.id, name = it.name) }
+
+    fun delete(id: String?) {
+        id?.let { productMongoDBRepository.deleteById(it) }
+    }
 }
