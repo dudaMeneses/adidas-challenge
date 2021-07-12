@@ -60,5 +60,6 @@
 - Apply security to run Swagger
 - Provide performance tests with Gatling or JMeter
 - Provide `API tests`
+- Implement `pessimistic lock` for saving transactions
 
 
