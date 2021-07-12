@@ -9,9 +9,8 @@ import reactor.core.publisher.Mono
 
 @Component
 class ProductHandler(private val productService: ProductService) {
-    fun sell(id: String, reservationToken: String) {
+    fun sell(id: String, reservationToken: String) =
         productService.sell(id, reservationToken)
-    }
 
     fun create(request: ProductRequest): Mono<ProductResponse> =
             productService.save(Product(name = request.name))

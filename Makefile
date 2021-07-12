@@ -1,4 +1,4 @@
-run:
+run: \
 	db
 	mvn spring-boot:start -Dspring-boot.run.profiles=local
 

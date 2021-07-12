@@ -24,7 +24,7 @@ class StockServiceRegisterTest {
 
     @BeforeEach
     fun init(){
-        stockService = StockServiceImpl(productRepository, stockRepository)
+        stockService = StockServiceImpl(productRepository, stockRepository, mock())
     }
 
     @Test

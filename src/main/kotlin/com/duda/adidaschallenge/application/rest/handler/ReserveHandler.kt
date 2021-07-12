@@ -11,7 +11,6 @@ class ReserveHandler(private val reserveService: ReserveService) {
         reserveService.reserve(productId)
             .map { ReservationResponse(it) }
 
-    fun unreserve(productId: String, token: String) {
+    fun unreserve(productId: String, token: String) =
         reserveService.unreserve(productId, token)
-    }
 }

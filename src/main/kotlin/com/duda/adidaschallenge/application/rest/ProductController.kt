@@ -34,7 +34,7 @@ class ProductController(private val stockHandler: StockHandler,
         stockHandler.findByProductId(id)
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping(path = ["/{id}/reserve"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(path = ["/{id}/reserve"])
     fun reserve(@PathVariable id: String): Mono<ReservationResponse> =
         reserveHandler.reserve(id)
 

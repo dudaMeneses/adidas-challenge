@@ -4,6 +4,7 @@ import com.duda.adidaschallenge.domain.model.Product
 import com.duda.adidaschallenge.domain.model.Reserve
 import com.duda.adidaschallenge.domain.service.ProductService
 import com.duda.adidaschallenge.domain.service.exception.ReservationAlreadySoldException
+import com.duda.adidaschallenge.domain.service.exception.ReserveNotFoundForProductException
 import com.duda.adidaschallenge.infrastructure.database.ProductRepository
 import com.duda.adidaschallenge.infrastructure.database.ReserveRepository
 import com.duda.adidaschallenge.infrastructure.database.StockRepository
@@ -19,10 +20,11 @@ class ProductServiceImpl(private val productRepository: ProductRepository,
     override fun sell(productId: String, token: String): Mono<Void> =
         stockRepository.findByProductId(productId)
             .flatMap { reserveRepository.findByIdAndStockId(token, it) }
+            .switchIfEmpty(Mono.error(ReserveNotFoundForProductException(token, productId)))
             .filter { !it.sold }
             .switchIfEmpty(Mono.error(ReservationAlreadySoldException(token)))
             .flatMap { reserveRepository.sell(Reserve(it.id, it.stockId)) }
-            .doOnNext { stockRepository.adjustStockAfterSell(it.stockId) }
+            .map { stockRepository.adjustStockAfterSell(it.stockId) }
             .then()
 
     @Transactional

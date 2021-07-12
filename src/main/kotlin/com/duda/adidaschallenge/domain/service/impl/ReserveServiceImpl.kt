@@ -21,13 +21,11 @@ class ReserveServiceImpl(private val reserveRepository: ReserveRepository,
             .flatMap { reserveRepository.reserve(it.id) }
             .map { it.id }
 
-
     @Transactional
     override fun unreserve(productId: String, token: String): Mono<Void> =
         stockRepository.findByProductId(productId)
             .flatMap { reserveRepository.findByIdAndStockId(token, it) }
-            .map { reserveRepository.unreserve(token) }
-            .then()
+            .flatMap { reserveRepository.unreserve(token) }
 
     override fun findByStockId(stockId: String?): Flux<Reserve> =
         reserveRepository.findByStockId(stockId)

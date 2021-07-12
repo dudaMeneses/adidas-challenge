@@ -73,6 +73,9 @@ class ProductServiceSellTest {
         whenever(reserveRepository.sell(any()))
             .thenReturn(Mono.just(Reserve(id = "321",stockId = "456", sold = false)))
 
+        whenever(stockRepository.adjustStockAfterSell(any()))
+            .thenReturn(Mono.just(Stock(id = "456", total = 10, productId = "123")))
+
         productService.sell("123", "321").block()
 
         verify(reserveRepository).sell(any())

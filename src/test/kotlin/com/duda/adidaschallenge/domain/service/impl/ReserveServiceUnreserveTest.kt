@@ -59,6 +59,9 @@ class ReserveServiceUnreserveTest {
         whenever(reserveRepository.findByIdAndStockId("999", stock))
             .thenReturn(Mono.just(Reserve(id = "999", sold = false, stockId = "456")))
 
+        whenever(reserveRepository.unreserve("999"))
+            .thenReturn(Mono.empty())
+
         reserveService.unreserve("123", "999").block()
 
         verify(reserveRepository).unreserve("999")
