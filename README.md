@@ -59,11 +59,12 @@
 ### Future Steps
 
 - Real database running in cloud because locally is not scalable at all
-- Add authentication to MongoDB container
-- Coded infrastructure (terraform & kubernetes)
-- Apply security to run Swagger
-- Provide performance tests with Gatling or JMeter
+- Add authentication to `MongoDB` container
+- Coded infrastructure (`terraform` & `kubernetes`)
+- Apply security to run `Swagger`
+- Provide performance tests with `Gatling` or `JMeter`
 - Provide `API tests`
 - Implement `pessimistic lock` for saving transactions
+- CD to some cloud environment
 
 
