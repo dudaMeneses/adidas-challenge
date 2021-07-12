@@ -21,10 +21,11 @@ class ReserveServiceImpl(private val reserveRepository: ReserveRepository,
             .flatMap { reserveRepository.reserve(it.id) }
             .map { it.id }
 
+
     @Transactional
     override fun unreserve(productId: String, token: String): Mono<Void> =
         stockRepository.findByProductId(productId)
-            .map { reserveRepository.findByIdAndStockId(token, it) }
+            .flatMap { reserveRepository.findByIdAndStockId(token, it) }
             .map { reserveRepository.unreserve(token) }
             .then()
 
@@ -33,11 +34,9 @@ class ReserveServiceImpl(private val reserveRepository: ReserveRepository,
 
     override fun validateReserveQuantity(stock: Stock): Mono<Stock> =
         Mono.just(stock)
-            .map { s ->
-                reserveRepository.findByStockId(s.id)
-                    .collectList()
-                    .block()?.let { s.copy(reserves = it) }
-            }
+            .map { reserveRepository.findByStockId(it.id) }
+            .flatMap { it.collectList() }
+            .map { stock.copy(reserves = it) }
             .filter { it.total > it.reserves.size }
             .switchIfEmpty(Mono.error(ReserveQuantityExceededException()))
 

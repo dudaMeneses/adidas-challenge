@@ -32,7 +32,7 @@ class ReserveServiceReserveTest {
             .thenAnswer { Mono.error<Throwable>(StockNotFoundForProductException("123")) }
 
         StepVerifier.create(reserveService.reserve("132"))
-            .expectError(StockNotFoundForProductException::class.java)
+            .verifyError(StockNotFoundForProductException::class.java)
     }
 
     @Test
@@ -44,7 +44,7 @@ class ReserveServiceReserveTest {
             .thenReturn(Flux.just(Reserve(id = "999", stockId = "456", sold = false)))
 
         StepVerifier.create(reserveService.reserve("132"))
-            .expectError(ReserveQuantityExceededException::class.java)
+            .verifyError(ReserveQuantityExceededException::class.java)
     }
 
     @Test

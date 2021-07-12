@@ -9,6 +9,7 @@ import com.duda.adidaschallenge.infrastructure.database.StockRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -31,7 +32,7 @@ class ReserveServiceUnreserveTest {
             .thenAnswer { Mono.error<Throwable>(StockNotFoundForProductException("123")) }
 
         StepVerifier.create(reserveService.unreserve("123", "999"))
-            .expectError(StockNotFoundForProductException::class.java)
+            .verifyError(StockNotFoundForProductException::class.java)
     }
 
     @Test
@@ -41,11 +42,11 @@ class ReserveServiceUnreserveTest {
         whenever(stockRepository.findByProductId(anyString()))
             .thenReturn(Mono.just(stock))
 
-        whenever(reserveRepository.findByIdAndStockId("999", stock))
+        whenever(reserveRepository.findByIdAndStockId(anyString(), any()))
             .thenAnswer { Mono.error<Throwable>(ReserveNotFoundForProductException("999", "123")) }
 
         StepVerifier.create(reserveService.unreserve("123", "999"))
-            .expectError(ReserveNotFoundForProductException::class.java)
+            .verifyError(ReserveNotFoundForProductException::class.java)
     }
 
     @Test

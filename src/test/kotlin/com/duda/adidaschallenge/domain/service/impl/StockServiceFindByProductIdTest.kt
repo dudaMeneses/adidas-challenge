@@ -16,7 +16,7 @@ class StockServiceFindByProductIdTest {
 
     @BeforeEach
     fun init(){
-        stockService = StockServiceImpl(stockRepository, mock())
+        stockService = StockServiceImpl(mock(), stockRepository, mock())
     }
 
     @Test

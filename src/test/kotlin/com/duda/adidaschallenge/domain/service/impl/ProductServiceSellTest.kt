@@ -35,7 +35,7 @@ class ProductServiceSellTest {
             .thenAnswer { Mono.error<Throwable>(StockNotFoundForProductException("123")) }
 
         StepVerifier.create(productService.sell("123", "321"))
-            .expectError(StockNotFoundForProductException::class.java)
+            .verifyError(StockNotFoundForProductException::class.java)
     }
 
     @Test
@@ -47,7 +47,7 @@ class ProductServiceSellTest {
             .thenAnswer { Mono.error<Throwable>(ReserveNotFoundForProductException("321", "123")) }
 
         StepVerifier.create(productService.sell("123", "321"))
-            .expectError(ReserveNotFoundForProductException::class.java)
+            .verifyError(ReserveNotFoundForProductException::class.java)
     }
 
     @Test
@@ -59,7 +59,7 @@ class ProductServiceSellTest {
             .thenReturn(Mono.just(Reserve(id = "321",stockId = "456", sold = true)))
 
         StepVerifier.create(productService.sell("123", "321"))
-            .expectError(ReservationAlreadySoldException::class.java)
+            .verifyError(ReservationAlreadySoldException::class.java)
     }
 
     @Test

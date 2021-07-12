@@ -1,6 +1,6 @@
 run:
 	db
-	mvn spring-boot:start
+	mvn spring-boot:start -Dspring-boot.run.profiles=local
 
 db:
 	docker-compose down
@@ -11,4 +11,4 @@ stop:
 	docker-compose down
 
 report:
-	mvn clean test
+	mvn clean verify

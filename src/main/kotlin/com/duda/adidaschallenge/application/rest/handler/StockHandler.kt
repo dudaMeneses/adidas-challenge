@@ -12,7 +12,6 @@ class StockHandler(private val stockService: StockService) {
         stockService.findByProductId(productId)
             .map { StockResponse(it.total, it.reserves.size, it.getSold()) }
 
-    fun register(productId: String, stock: Int) {
+    fun register(productId: String, stock: Int) =
         stockService.register(Stock(total = stock, productId = productId))
-    }
 }
