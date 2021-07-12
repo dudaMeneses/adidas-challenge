@@ -1,3 +1,5 @@
+[![Java CI with Maven](https://github.com/dudaMeneses/adidas-challenge/actions/workflows/maven.yml/badge.svg)](https://github.com/dudaMeneses/adidas-challenge/actions/workflows/maven.yml)
+
 # Adidas Challenge
 
 > This project is part of the Adidas hiring process for Senior Backend Developer following the proposed [premisses](./auxiliary-files/confirmed_challenge.pdf).
