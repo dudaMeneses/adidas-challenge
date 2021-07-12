@@ -1,4 +1,5 @@
 [![Java CI with Maven](https://github.com/dudaMeneses/adidas-challenge/actions/workflows/maven.yml/badge.svg)](https://github.com/dudaMeneses/adidas-challenge/actions/workflows/maven.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/dudameneses/adidas-challenge/badge/main)](https://www.codefactor.io/repository/github/dudameneses/adidas-challenge/overview/main)
 
 # Adidas Challenge
 
