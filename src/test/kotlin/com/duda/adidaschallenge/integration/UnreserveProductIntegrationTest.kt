@@ -1,11 +1,12 @@
 package com.duda.adidaschallenge.integration
 
-import com.duda.adidaschallenge.application.projection.request.StockRequest
+import com.duda.adidaschallenge.application.projection.request.ReservationRequest
+import com.duda.adidaschallenge.domain.model.Reserve
 import com.duda.adidaschallenge.domain.model.Stock
+import com.duda.adidaschallenge.infrastructure.database.ReserveRepository
 import com.duda.adidaschallenge.infrastructure.database.StockRepository
 import com.duda.adidaschallenge.infrastructure.database.mongo.ProductMongoDBRepository
 import com.duda.adidaschallenge.infrastructure.model.ProductMongo
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -13,10 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class CreateStockForProductIntegrationTest {
+class UnreserveProductIntegrationTest {
 
     @Autowired
     private lateinit var client: WebTestClient
@@ -27,55 +27,54 @@ class CreateStockForProductIntegrationTest {
     @Autowired
     private lateinit var stockRepository: StockRepository
 
+    @Autowired
+    private lateinit var reserveRepository: ReserveRepository
+
     @Test
-    fun whenProductNotExists_thenReturnNotFound(){
-        client.patch()
-            .uri("/product/{id}/stock", "999999999999")
+    fun whenStockNotFound_thenReturnNotFound(){
+        client.post()
+            .uri("/product/{id}/unreserve", "999999999999")
             .headers {
                 it.accept = listOf(MediaType.APPLICATION_JSON)
                 it.contentType = MediaType.APPLICATION_JSON
             }
-            .bodyValue(StockRequest(10))
+            .bodyValue(ReservationRequest("123"))
             .exchange()
             .expectStatus().isNotFound
-            .expectBody().jsonPath(".message").isEqualTo("Product 999999999999 not found")
+            .expectBody().jsonPath(".message").isEqualTo("Stock not found for product 999999999999")
     }
 
     @Test
-    fun whenProductExistsAndThereIsNoStock_thenSaveAccordingly(){
+    fun whenHasStockButReservationWasNotPlaced_thenReturnBadRequest(){
         val product = productMongoDBRepository.save(ProductMongo(name = "test")).block()
+        stockRepository.save(Stock(productId = product?.id!!, total = 1)).block()
 
-        client.patch()
-            .uri("/product/{id}/stock", product?.id)
+        client.post()
+            .uri("/product/{id}/unreserve", product.id)
             .headers {
                 it.accept = listOf(MediaType.APPLICATION_JSON)
                 it.contentType = MediaType.APPLICATION_JSON
             }
-            .bodyValue(StockRequest(10))
+            .bodyValue(ReservationRequest("123"))
             .exchange()
-            .expectStatus().isNoContent
-
-        product?.id?.let { stockRepository.findByProductId(it) }
-            ?.map { assertEquals(10, it.total) }
+            .expectStatus().isNotFound
+            .expectBody().jsonPath(".message").isEqualTo("Reserve 123 not found for product ${product.id}")
     }
 
     @Test
-    fun whenProductExistsAndThereIsStock_thenReturnProductStock(){
+    fun whenHappyPath_thenReturnOk(){
         val product = productMongoDBRepository.save(ProductMongo(name = "test")).block()
+        val stock = stockRepository.save(Stock(productId = product?.id!!, total = 1)).block()
+        val reserve = reserveRepository.save(Reserve(stockId = stock?.id!!)).block()
 
-        product?.id?.let { stockRepository.save(Stock(productId = it, total = 10)) }
-
-        client.patch()
-            .uri("/product/{id}/stock", product?.id)
+        client.post()
+            .uri("/product/{id}/unreserve", product.id)
             .headers {
                 it.accept = listOf(MediaType.APPLICATION_JSON)
                 it.contentType = MediaType.APPLICATION_JSON
             }
-            .bodyValue(StockRequest(2))
+            .bodyValue(ReservationRequest(reservationToken = reserve?.id!!))
             .exchange()
-            .expectStatus().isNoContent
-
-        product?.id?.let { stockRepository.findByProductId(it) }
-            ?.map { assertEquals(2, it.total) }
+            .expectStatus().isOk
     }
 }

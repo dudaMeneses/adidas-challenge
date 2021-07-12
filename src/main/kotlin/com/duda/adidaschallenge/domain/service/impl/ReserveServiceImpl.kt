@@ -18,7 +18,7 @@ class ReserveServiceImpl(private val reserveRepository: ReserveRepository,
     override fun reserve(productId: String): Mono<String> =
         stockRepository.findByProductId(productId)
             .flatMap { validateReserveQuantity(it) }
-            .flatMap { reserveRepository.reserve(it.id) }
+            .flatMap { it.id?.let { it1 -> reserveRepository.reserve(it1) } }
             .map { it.id }
 
     @Transactional

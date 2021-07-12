@@ -24,7 +24,7 @@ class ReserveRepository(private val reserveMongoDBRepository: ReserveMongoDBRepo
             .switchIfEmpty(Mono.error(ReserveNotFoundForProductException(token, stock.productId)))
             .map { Reserve(it.id, it.stockId, it.sold) }
 
-    fun reserve(stockId: String?): Mono<Reserve> =
+    fun reserve(stockId: String): Mono<Reserve> =
         reserveMongoDBRepository.save(ReserveMongo(stockId = stockId))
             .map { Reserve(it.id, it.stockId, it.sold) }
 

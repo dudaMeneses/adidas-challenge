@@ -42,7 +42,7 @@
 - Services that produce no result could receive status code `NO_CONTENT` instead `OK` once they don't result entities for the service call and there are no asynchronous processing unfinished.
 - Service `/product/:id/sold` naming doesn't follow REST common practices, or even the other services naming pattern, in order to execute a command. I'd recommend `/product/:id/sell` instead.
 - MongoDB is not a relational DB, so there will be indeed redundancies regarding data saved. What was tried is keep the data structure as simple as possible in order to serve the application (aka, challenge) fast and usable.
-- To solve the concurrent reservations and sells it was opted for the optimistic lock provided for MongoDB, using the `@Version` annotation on database entities. Also `@Transactional` was applied to rollback wrong concurrent saves.
+- Once `Webflux` and `springboot mongodb reactive` were used, the whole application already works in a non-blocking way.  
 
 ### Tech Stack
 
@@ -59,5 +59,6 @@
 - Coded infrastructure (terraform & kubernetes)
 - Apply security to run Swagger
 - Provide performance tests with Gatling or JMeter
+- Provide `API tests`
 
 

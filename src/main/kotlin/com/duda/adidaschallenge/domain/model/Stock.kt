@@ -7,4 +7,7 @@ data class Stock(val id: String? = null,
 
     fun getSold(): Int =
         reserves.filter { reserve -> reserve.sold }.count()
+
+    fun getReserve(): Int =
+        reserves.filter { reserve -> !reserve.sold }.count()
 }
