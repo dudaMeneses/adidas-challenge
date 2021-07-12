@@ -22,7 +22,7 @@ class StockServiceImpl(private val productRepository: ProductRepository,
     override fun register(newStock: Stock): Mono<Void> =
         productRepository.findById(newStock.productId)
             .flatMap { stockRepository.findByProductId(newStock.productId) }
-            .onErrorResume(StockNotFoundForProductException::class.java) { Mono.just(Stock(productId = newStock.productId)) }
+            .onErrorResume(StockNotFoundForProductException::class.java) { Mono.just(newStock) }
             .flatMap { reserveService.validateReserveQuantity(it) }
             .map { it.copy(total = newStock.total) }
             .doOnNext { stockRepository.save(it) }

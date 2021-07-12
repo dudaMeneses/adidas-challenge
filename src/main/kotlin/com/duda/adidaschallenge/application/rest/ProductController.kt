@@ -23,7 +23,7 @@ class ProductController(private val stockHandler: StockHandler,
                         private val productHandler: ProductHandler,
                         private val reserveHandler: ReserveHandler) {
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping(path = ["/{id}/stock"], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun registerStock(@PathVariable id: String, @RequestBody request: StockRequest) =
         stockHandler.register(id, request.stock)
