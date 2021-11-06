@@ -1,3 +1,6 @@
+[![Java CI with Maven](https://github.com/dudaMeneses/adidas-challenge/actions/workflows/maven.yml/badge.svg)](https://github.com/dudaMeneses/adidas-challenge/actions/workflows/maven.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/dudameneses/adidas-challenge/badge/main)](https://www.codefactor.io/repository/github/dudameneses/adidas-challenge/overview/main)
+
 # Adidas Challenge
 
 > This project is part of the Adidas hiring process for Senior Backend Developer following the proposed [premisses](./auxiliary-files/confirmed_challenge.pdf).
@@ -51,15 +54,17 @@
 - Spring-Boot (mongodb-reactive and webflux)
 - Docker
 - Makefile
+- Github Actions (for CI only)
 
 ### Future Steps
 
 - Real database running in cloud because locally is not scalable at all
-- Add authentication to MongoDB container
-- Coded infrastructure (terraform & kubernetes)
-- Apply security to run Swagger
-- Provide performance tests with Gatling or JMeter
+- Add authentication to `MongoDB` container
+- Coded infrastructure (`terraform` & `kubernetes`)
+- Apply security to run `Swagger`
+- Provide performance tests with `Gatling` or `JMeter`
 - Provide `API tests`
 - Implement `pessimistic lock` for saving transactions
+- CD to some cloud environment
 
 
