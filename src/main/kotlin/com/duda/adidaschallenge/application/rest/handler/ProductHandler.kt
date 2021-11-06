@@ -13,7 +13,10 @@ class ProductHandler(private val productService: ProductService) {
         productService.sell(id, reservationToken)
 
     fun create(request: ProductRequest): Mono<ProductResponse> =
-            productService.save(Product(name = request.name))
-            .map { ProductResponse(it.id, it.name) }
+            productService.save(request.toModel())
+            .map { it.toResponse() }
+
+    fun Product.toResponse(): ProductResponse = ProductResponse(this.id, this.name)
+    fun ProductRequest.toModel(): Product = Product(name = this.name)
 
 }

@@ -14,7 +14,7 @@ class ReserveRepository(private val reserveMongoDBRepository: ReserveMongoDBRepo
 
     fun findByStockId(stockId: String?): Flux<Reserve> =
         reserveMongoDBRepository.findByStockId(stockId)
-            .map { Reserve(it.id, it.stockId, it.sold) }
+            .map { it.toModel() }
 
     fun unreserve(token: String): Mono<Void> =
         reserveMongoDBRepository.deleteById(token)
@@ -22,18 +22,20 @@ class ReserveRepository(private val reserveMongoDBRepository: ReserveMongoDBRepo
     fun findByIdAndStockId(token: String, stock: Stock): Mono<Reserve> =
         reserveMongoDBRepository.findByIdAndStockId(token, stock.id)
             .switchIfEmpty(Mono.error(ReserveNotFoundForProductException(token, stock.productId)))
-            .map { Reserve(it.id, it.stockId, it.sold) }
+            .map { it.toModel() }
 
     fun reserve(stockId: String): Mono<Reserve> =
         reserveMongoDBRepository.save(ReserveMongo(stockId = stockId))
-            .map { Reserve(it.id, it.stockId, it.sold) }
+            .map {it.toModel() }
 
     fun sell(reserve: Reserve): Mono<Reserve> =
         reserveMongoDBRepository.save(ReserveMongo(reserve.id, reserve.stockId, true))
-            .map { Reserve(it.id, it.stockId, it.sold) }
+            .map { it.toModel() }
 
     fun save(reserve: Reserve): Mono<Reserve> =
-        reserveMongoDBRepository.save(ReserveMongo(id = reserve.id, stockId = reserve.stockId, sold = reserve.sold))
-            .map { Reserve(it.id, it.stockId, it.sold) }
+        reserveMongoDBRepository.save(ReserveMongo(reserve.id, reserve.stockId, reserve.sold))
+            .map { it.toModel() }
+
+    fun ReserveMongo.toModel(): Reserve = Reserve(this.id, this.stockId, this.sold)
 
 }

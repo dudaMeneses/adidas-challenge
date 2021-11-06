@@ -13,14 +13,17 @@ class StockRepository(private val stockMongoDBRepository: StockMongoDBRepository
     fun findByProductId(productId: String): Mono<Stock> =
         stockMongoDBRepository.findByProductId(productId)
             .switchIfEmpty(Mono.error(StockNotFoundForProductException(productId)))
-            .map { Stock(it.id, it.total, it.productId) }
+            .map { it.toModel() }
 
     fun save(stock: Stock): Mono<Stock> =
-        stockMongoDBRepository.save(StockMongo(stock.id, stock.productId, stock.total))
-            .map { Stock(it.id, it.total, it.productId) }
+        stockMongoDBRepository.save(stock.toRequest())
+            .map { it.toModel() }
 
     fun adjustStockAfterSell(stockId: String): Mono<Stock> =
         stockMongoDBRepository.findById(stockId)
             .flatMap { stockMongoDBRepository.save(it.apply { total -= 1 }) }
-            .map { Stock(it.id, it.total, it.productId) }
+            .map { it.toModel() }
+
+    fun StockMongo.toModel(): Stock = Stock(this.id, this.total, this.productId)
+    fun Stock.toRequest(): StockMongo = StockMongo(this.id, this.productId, this.total)
 }

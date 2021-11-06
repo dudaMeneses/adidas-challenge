@@ -10,12 +10,14 @@ import reactor.core.publisher.Mono
 @Repository
 class ProductRepository(private val productMongoDBRepository: ProductMongoDBRepository) {
     fun save(product: Product): Mono<Product> =
-        productMongoDBRepository.save(ProductMongo(name = product.name))
-            .map { Product(id = it.id, name = it.name) }
+        productMongoDBRepository.save(product.toRequest())
+            .map { it.toModel() }
 
     fun findById(id: String): Mono<Product> =
         productMongoDBRepository.findById(id)
             .switchIfEmpty(Mono.error(ProductNotFoundException(id)))
-            .map { Product(id = it.id, name = it.name) }
+            .map { it.toModel() }
 
+    fun ProductMongo.toModel(): Product = Product(this.id, this.name)
+    fun Product.toRequest(): ProductMongo = ProductMongo(name = this.name)
 }
